@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dummy Payment Gateway</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background : url("img/payimg1.jpg") no-repeat center center fixed ;
+            background-size: cover;
+        }
+        form {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            width: 320px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #444;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .method-section {
+            display: none;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <form id="paymentForm">
+        <h2>Choose Payment Method</h2>
+
+        <label for="paymentMethod">Payment Method:</label>
+        <select id="paymentMethod" required>
+            <option value="">Select...</option>
+            <option value="card">Credit/Debit Card</option>
+            <option value="upi">UPI</option>
+            <option value="netbanking">Net Banking</option>
+        </select>
+
+        <!-- Card Section -->
+        <div id="cardSection" class="method-section">
+            <label for="cardHolderName">Card Holder Name:</label>
+            <input type="text" id="cardHolderName">
+
+            <label for="cardNumber">Card Number:</label>
+            <input type="text" id="cardNumber" pattern="\d{16}" title="Enter 16 digits">
+
+            <label for="expiryDate">Expiry Date:</label>
+            <input type="text" id="expiryDate" pattern="\d{2}/\d{4}" title="MM/YYYY" placeholder="MM/YYYY">
+
+            <label for="cvv">CVV:</label>
+            <input type="text" id="cvv" pattern="\d{3,4}" title="Enter 3 or 4 digits">
+        </div>
+
+        <!-- UPI Section -->
+        <div id="upiSection" class="method-section">
+            <label for="upiId">UPI ID:</label>
+            <input type="text" id="upiId" placeholder="example@upi">
+        </div>
+
+        <!-- Net Banking Section -->
+        <div id="netBankingSection" class="method-section">
+            <label for="bank">Select Bank:</label>
+            <select id="bank">
+                <option value="">Choose a bank</option>
+                <option value="HDFC">HDFC</option>
+                <option value="ICICI">ICICI</option>
+                <option value="SBI">SBI</option>
+                <option value="Axis">Axis</option>
+            </select>
+
+            <label for="accountNumber">Account Number:</label>
+            <input type="text" id="accountNumber" pattern="\d{10,12}" title="Enter a valid account number">
+
+            <label for="ifscCode">IFSC Code:</label>
+            <input type="text" id="ifscCode" pattern="[A-Za-z]{4}[0-9]{7}" title="Enter a valid IFSC code">
+        </div>
+
+        <button type="submit">Pay</button>
+    </form>
+
+    <script>
+        // Fetch the cart total from localStorage
+        const cartTotal = localStorage.getItem("cartTotal") || 0;
+
+        // Set the total price dynamically on the form
+        const paymentForm = document.getElementById('paymentForm');
+        const paymentMethodSelect = document.getElementById('paymentMethod');
+        const cardSection = document.getElementById('cardSection');
+        const upiSection = document.getElementById('upiSection');
+        const netBankingSection = document.getElementById('netBankingSection');
+
+        paymentMethodSelect.addEventListener('change', function () {
+            const method = this.value;
+            cardSection.style.display = 'none';
+            upiSection.style.display = 'none';
+            netBankingSection.style.display = 'none';
+
+            if (method === 'card') cardSection.style.display = 'block';
+            if (method === 'upi') upiSection.style.display = 'block';
+            if (method === 'netbanking') netBankingSection.style.display = 'block';
+        });
+
+        paymentForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const method = paymentMethodSelect.value;
+            let name = "N/A";
+            let details = "";
+
+            if (method === 'card') {
+                name = document.getElementById('cardHolderName').value || "Card User";
+            } else if (method === 'upi') {
+                name = document.getElementById('upiId').value || "UPI User";
+            } else if (method === 'netbanking') {
+                name = document.getElementById('bank').value + " Bank User";
+                details = `Account Number: ${document.getElementById('accountNumber').value}, IFSC: ${document.getElementById('ifscCode').value}`;
+            }
+
+            // Simulate processing payment
+            setTimeout(() => {
+                const receiptData = {
+                    name,
+                    amount: `₹${cartTotal}`,
+                    date: new Date().toLocaleString(),
+                    method: method.charAt(0).toUpperCase() + method.slice(1),
+                    details: details
+                };
+
+                // Save receipt to localStorage
+                localStorage.setItem("receipt", JSON.stringify(receiptData));
+
+                // Redirect to the receipt page after payment
+                window.location.href = "receipt.html"; // Redirect to the receipt page
+            }, 2000);
+        });
+    </script>
+
+</body>
+</html>

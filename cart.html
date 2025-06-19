@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - E-Commerce Website</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.7/css/all.css">
+</head>
+
+<body>
+    <section id="header">
+        <a href="#"><img src="img/logo.png" class="logo" alt=""></a>
+        <div>
+            <ul id="navbar">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li id="lg-bag"><a class="active" href="cart.html"><i class="fas fa-shopping-bag"></i></a></li>
+                <a href="#" id="close"><i class="fas fa-times"></i></a>
+            </ul>
+        </div>
+        <div id="mobile">
+            <a href="cart.html"><i class="fas fa-shopping-bag"></i></a>
+            <i id="bar" class="fas fa-outdent"></i>
+        </div>
+    </section>
+
+    <!-- Brand name or slogan -->
+    <div class="des">
+        <span>Bag Your Vibe</span>
+    </div>
+
+    <section id="page-header" class="cart-header">
+        <h2>#Cart</h2>
+        <p>Apply a coupon code and get up to 30% off!</p>
+    </section>
+
+    <section id="cart" class="section-p1">
+        <table width="100%">
+            <thead>
+                <tr>
+                    <td>REMOVE</td>
+                    <td>IMAGE</td>
+                    <td>PRODUCT</td>
+                    <td>PRICE</td>
+                    <td>QUANTITY</td>
+                    <td>SUBTOTAL</td>
+                </tr>
+            </thead>
+            <tbody id="cart-items">
+                <!-- Cart items will be dynamically generated here -->
+            </tbody>
+        </table>
+    </section>
+
+    <section id="cart-add" class="section-p1">
+        <div id="subtotal">
+            <h3>Cart Total</h3>
+            <table>
+                <tr>
+                    <td>Cart Subtotal</td>
+                    <td id="cart-subtotal">₹0</td>
+                </tr>
+                <tr>
+                    <td>Shipping</td>
+                    <td>Free</td>
+                </tr>
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td><strong id="cart-total">₹0</strong></td>
+                </tr>
+            </table>
+
+            <!-- Proceed to Checkout Button -->
+            <button class="normal" onclick="proceedToCheckout()">Proceed to Checkout</button>
+        </div>
+    </section>
+
+    <script>
+        // Load cart items
+        function loadCartItems() {
+            let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Force update all item prices to ₹649
+            cartItems = cartItems.map(item => ({ ...item, price: 649 }));
+
+            let cartTable = document.getElementById('cart-items');
+            let cartSubtotal = 0;
+
+            cartTable.innerHTML = '';
+
+            cartItems.forEach((item, index) => {
+                let itemSubtotal = item.price * item.quantity;
+                cartSubtotal += itemSubtotal;
+
+                cartTable.innerHTML += `
+                <tr>
+                    <td><a href="#" onclick="removeItem(${index})"><i class="fas fa-trash"></i></a></td>
+                    <td><img src="${item.image}" alt="" width="50"></td>
+                    <td>${item.name}</td>
+                    <td>₹${item.price}</td>
+                    <td>${item.quantity}</td>
+                    <td>₹${itemSubtotal}</td>
+                </tr>`;
+            });
+
+            document.getElementById('cart-subtotal').innerText = `₹${cartSubtotal}`;
+            document.getElementById('cart-total').innerText = `₹${cartSubtotal}`;
+
+            // Save updated prices to localStorage
+            localStorage.setItem('cart', JSON.stringify(cartItems));
+        }
+
+        // Remove item
+        function removeItem(index) {
+            let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            cartItems.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cartItems));
+            loadCartItems();
+        }
+
+        // Proceed to Checkout
+        function proceedToCheckout() {
+            const cartTotalText = document.getElementById('cart-total').innerText;
+            const cartTotal = cartTotalText.replace(/[^\d.]/g, '');
+
+            const receipt = {
+                name: "John Doe", // Replace with actual user name if available
+                amount: `₹${cartTotal}`,
+                date: new Date().toLocaleString(),
+            };
+
+            localStorage.setItem("receipt", JSON.stringify(receipt));
+            localStorage.setItem("cartTotal", cartTotal);
+            window.location.href = "payment.html";
+        }
+
+        // Load on page load
+        window.onload = function () {
+            loadCartItems();
+        };
+    </script>
+
+</body>
+
+</html>

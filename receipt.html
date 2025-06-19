@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Receipt</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #e3f2fd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background : url("img/backgroung.png") no-repeat center center fixed ;
+            background-size: cover;
+        }
+
+        .receipt-box {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        .receipt-box h2 {
+            color: #4CAF50;
+        }
+
+        .receipt-box p {
+            margin: 12px 0;
+            font-size: 16px;
+        }
+
+        .success-icon {
+            font-size: 48px;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt-box">
+        <div class="success-icon">✅</div>
+        <h2>Payment Successful!</h2>
+        <p id="name"></p>
+        <p id="amount"></p>
+        <p id="method"></p>
+        <p id="details"></p>
+        <p id="date"></p>
+    </div>
+
+    <script>
+        const receiptData = JSON.parse(localStorage.getItem("receipt"));
+
+        if (receiptData) {
+            document.getElementById("name").textContent = `Paid By: ${receiptData.name}`;
+            document.getElementById("amount").textContent = `Amount Paid: ${receiptData.amount}`;
+            document.getElementById("method").textContent = `Payment Method: ${receiptData.method}`;
+            document.getElementById("details").textContent = `Details: ${receiptData.details || 'N/A'}`;
+            document.getElementById("date").textContent = `Date: ${receiptData.date}`;
+        } else {
+            document.querySelector(".receipt-box").innerHTML = "<p>Something went wrong.</p>";
+        }
+    </script>
+</body>
+</html>

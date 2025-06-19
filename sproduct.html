@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce-Website</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.7/css/all.css">
+</head>
+
+<body>
+    <section id="header">
+        <a href="#"><img src="img/logo.png" class="logo" alt=""></a>
+        <div>
+            <ul id="navbar">
+                <li><a href="index.html">Home</a></li>
+                <li><a class="active" href="shop.html">Shop</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li id="lg-bag"><a href="cart.html"><i class="fas fa-shopping-bag"></i></a></li>
+                <a href="#" id="close"><i class="fas fa-times"></i></a>
+            </ul>
+        </div>
+        <div id="mobile">
+            <a href="cart.html"><i class="fas fa-shopping-bag"></i></a>
+            <i id="bar" class="fas fa-outdent"></i>
+        </div>
+    </section>
+
+    <section id="prodetails" class="section-p1">
+        <div class="single-pro-image">
+            <img src="img/products/f1.jpg" width="100%" id="MainImg" alt="">
+            <div class="small-img-group">
+                <div class="small-img-col"><img src="img/products/f1.jpg" width="100%" class="small-img" alt=""></div>
+                <div class="small-img-col"><img src="img/products/f2.jpg" width="100%" class="small-img" alt=""></div>
+                <div class="small-img-col"><img src="img/products/f3.jpg" width="100%" class="small-img" alt=""></div>
+                <div class="small-img-col"><img src="img/products/f4.jpg" width="100%" class="small-img" alt=""></div>
+                <div class="small-img-col"><img src="img/products/f5.jpg" width="100%" class="small-img" alt=""></div>
+            </div>
+        </div>
+        <div class="single-pro-details">
+            
+            <h4>ThreadTales</h4>
+            <h2>₹649</h2>
+            <select id="product-Number">
+                <option>Select no.of products</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+            </select>
+            <input type="number" value="1" id="product-quantity">
+            <button id="add-to-cart-btn" class="normal">Add to Cart</button>
+            <h4>Product Details</h4>
+            <span>Every Embroza tote tells a story—crafted with care and threaded with creativity. This embroidered tote bag blends fashion with personal expression, making it more than just a carryall. Designed for everyday use yet bold in its uniqueness, each piece is a reflection of the person carrying it. Whether you're heading to college, shopping, or a weekend getaway, this tote is your perfect companion—durable, spacious, and made with a touch of you.</span>
+        </div>
+    </section>
+
+    
+
+    <script>
+        // Product Image Switching Functionality
+        var MainImg = document.getElementById('MainImg');
+        var smallimg = document.getElementsByClassName('small-img');
+
+        smallimg[0].onclick = function () {
+            MainImg.src = smallimg[0].src;
+        }
+        smallimg[1].onclick = function () {
+            MainImg.src = smallimg[1].src;
+        }
+        smallimg[2].onclick = function () {
+            MainImg.src = smallimg[2].src;
+        }
+        smallimg[3].onclick = function () {
+            MainImg.src = smallimg[3].src;
+        }
+        smallimg[4].onclick = function () {
+            MainImg.src = smallimg[4].src;
+        }
+
+        
+        
+            // Add to Cart Functionality
+            document.getElementById('add-to-cart-btn').addEventListener('click', function() {
+                var productDetails = {
+                    name: "BOOKIE", // Set the product name here
+                    price: 509,
+                    quantity: document.getElementById('product-quantity').value,
+                    image: MainImg.src
+                };
+        
+                // Retrieve existing cart items or initialize an empty array
+                let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+                cartItems.push(productDetails);
+        
+                // Store the updated cart back into local storage
+                localStorage.setItem('cart', JSON.stringify(cartItems));
+        
+                alert('Item added to cart!');
+            });
+        </script>
+         
+        
+        
+
+    <script src="script.js"></script>
+</body>
+
+</html>
